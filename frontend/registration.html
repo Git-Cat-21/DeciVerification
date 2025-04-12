@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="style2.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+    <h2>Student Registration & Verification</h2>
+
+    <button onclick="connectWallet()">Connect MetaMask</button>
+    <p><strong>Wallet Address:</strong> <span id="walletAddress">Not connected</span></p>
+
+    <h3>Student Eligibility Criteria</h3>
+    <input type="text" id="name" placeholder="Name"><br><br>
+    <input type="text" id="ipfshash" placeholder="12th pass certificate IPFS hash"><br><br>
+    <button onclick="verifyEligibility()">Verify Eligibility</button>
+    <p id="eligibilityStatus">Status: Not Verified</p>
+
+    <h3>Register Student to University</h3>
+    <input type="text" id="registerName" placeholder="Name"><br><br>
+    <input type="text" id="srn" placeholder="SRN"><br><br>
+    <input type="text" id="course" placeholder="Course"><br><br>
+    <input type="number" id="semester" placeholder="Semester"><br><br>
+    <button onclick="registerStudent()">Register</button>
+
+    <h3>Verify Student of University</h3>
+    <input type="text" id="studentAddress" placeholder="Enter Student Address"><br><br>
+    <button onclick="verifyStudent()">Verify Student</button>
+    <p id="studentVerification">Status: Unknown</p>
+
+    <a href="certificate.html"><button>Go to Certification Page</button></a>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -23,6 +23,6 @@
   "homepage": "https://github.com/Git-Cat-21/DeciVerification#readme",
   "dependencies": {
     "@truffle/hdwallet-provider": "^2.1.15",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.5.0"
   }
 }

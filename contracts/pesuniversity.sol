@@ -9,11 +9,36 @@ contract pesuniversity {
         string Course;
         uint Semester;
         bool isRegistered;
+        bool isEligible;
+        string certificateIPFSHash;
     }
 
     mapping(address => Student) public Students;
+    mapping(string => bool) public verifiedCertificates;
+
+    // Function to verify eligibility with 12th pass certificate
+    function verifyEligibility(string memory _name, string memory _certificateIPFSHash) public {
+        // Check if IPFS hash is not empty
+        require(bytes(_certificateIPFSHash).length > 0, "Invalid certificate hash");
+        
+        // Mark the certificate as verified
+        verifiedCertificates[_certificateIPFSHash] = true;
+        
+        // Update student eligibility status
+        Students[msg.sender].Name = _name;
+        Students[msg.sender].isEligible = true;
+        Students[msg.sender].certificateIPFSHash = _certificateIPFSHash;
+    }
+
+    // Check if student is eligible
+    function isStudentEligible(address _student) public view returns (bool) {
+        return Students[_student].isEligible;
+    }
 
     function registerStudent(string memory _Name, string memory _SRN, string memory _Course, uint256 Semester) public {
+        // Require that student is eligible before registration
+        require(Students[msg.sender].isEligible, "Student must verify eligibility first");
+        
         Students[msg.sender].Name = _Name;
         Students[msg.sender].SRN = _SRN;
         Students[msg.sender].Semester = Semester;

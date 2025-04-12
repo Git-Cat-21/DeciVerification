@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Registry</title>
+    <link rel="stylesheet" href="style3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h2>University Registry</h2>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <p>Wallet Address: <span id="walletAddress">Not connected</span></p>
+
+    <h3>Register University</h3>
+    <input type="text" id="uniName" placeholder="University Name" required>
+    <input type="text" id="uniRegId" placeholder="Registration ID" required>
+    <input type="text" id="uniIPFSHash" placeholder="IPFS Hash" required>
+    <button onclick="registerUniversity()">Register</button>
+
+    <h3>Verify University</h3>
+    <input type="text" id="verifyRegId" placeholder="Enter University Reg ID">
+    <button onclick="verifyUniversity()">Verify University</button>
+    <p id="universityDetails"></p>
+
+
+    <h3>Remove University</h3>
+    <input type="text" id="removeUniRegId" placeholder="Registration ID" required>
+    <button onclick="removeUniversity()">Remove</button>
+
+    <h3>All Registered Universities</h3>
+    <button onclick="getAllUniversities()">Fetch All</button>
+    <p id="allUniversities"></p>
+     
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+/* General Page Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #f9f9f9, #e0eafc);
+    color: #333;
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    color: #34495e;
+    margin-top: 2rem;
+}
+
+/* Buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Wallet Address */
+#walletAddress {
+    font-weight: bold;
+    color: #2980b9;
+}
+
+/* Verification Status */
+#studentVerification {
+    background: #ecf0f1;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border-left: 4px solid #9b59b6;
+    font-size: 14px;
+}
+
+/* Navigation Button */
+a button {
+    background-color: #3498db;
+    margin-top: 20px;
+}
+
+a button:hover {
+    background-color: #2980b9;
+}
