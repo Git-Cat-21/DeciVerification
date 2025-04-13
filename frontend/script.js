@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0x9d9b8dc3858d55AE8CFCfE42131E2b53a8731b7A";
+const CONTRACT_ADDRESS = "0xC8e44e8F4bA192752fbDe1Ce77C1618f1B367bd7";
 const ABI = [
     {
         "inputs": [
@@ -107,25 +107,20 @@ const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs/files";
 // Connect wallet and store address in localStorage
 async function connectWallet() {
     if (window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        const address = await signer.getAddress();
-        document.getElementById("walletAddress").innerText = address;
-
-        // Store address in localStorage
-        localStorage.setItem("walletAddress", address);
-
-        contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-        
-        // Check if student is already eligible
         try {
-            const isEligible = await contract.isStudentEligible(address);
-            if (isEligible) {
-                document.getElementById("eligibilityStatus").innerText = "Status: Already Verified ✅";
-            }
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            signer = provider.getSigner();
+            const address = await signer.getAddress();
+            document.getElementById("walletAddress").innerText = address;
+
+            // Store address in localStorage
+            localStorage.setItem("walletAddress", address);
+
+            contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
         } catch (error) {
-            console.error("Error checking eligibility:", error);
+            console.error("Error connecting wallet:", error);
+            alert("Failed to connect wallet. Please try again.");
         }
     } else {
         alert("Please install MetaMask!");
@@ -133,21 +128,29 @@ async function connectWallet() {
 }
 
 // Load wallet from localStorage
-function loadWallet() {
+async function loadWallet() {
     const storedAddress = localStorage.getItem("walletAddress");
     if (storedAddress) {
         document.getElementById("walletAddress").innerText = storedAddress;
         if (window.ethereum) {
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            signer = provider.getSigner();
-            contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-            
-            // Check eligibility status on page load
-            checkEligibilityStatus(storedAddress);
+            try {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                const currentAddress = await signer.getAddress();
+                if (currentAddress.toLowerCase() === storedAddress.toLowerCase()) {
+                    contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+                } else {
+                    localStorage.removeItem("walletAddress");
+                    document.getElementById("walletAddress").innerText = "Not connected";
+                }
+            } catch (error) {
+                console.error("Error loading wallet:", error);
+                localStorage.removeItem("walletAddress");
+                document.getElementById("walletAddress").innerText = "Not connected";
+            }
         }
     }
 }
-
 // Function to check eligibility status
 async function checkEligibilityStatus(address) {
     try {
