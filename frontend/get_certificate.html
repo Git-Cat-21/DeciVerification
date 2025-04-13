@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Management</title>
+    <link rel="stylesheet" href="certificate.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+    <h2>Certificate Management</h2>
+
+    <button onclick="connectWallet()">Connect MetaMask</button>
+    <p><strong>Wallet Address:</strong> <span id="walletAddress">Not connected</span></p>
+
+
+    <h3>Get Certificate</h3>
+    <input type="text" id="getCertSrn" placeholder="Enter SRN"><br><br>
+    <button onclick="getCertificate()">Get Certificate</button>
+    <p id="certificateDetails">Certificate Details: None</p>
+
+    <a href="index.html"><button>Home  Page</button></a>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

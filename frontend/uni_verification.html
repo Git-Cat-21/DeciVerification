@@ -13,15 +13,10 @@
     <button onclick="connectWallet()">Connect Wallet</button>
     <p>Wallet Address: <span id="walletAddress">Not connected</span></p>
 
-    <h3>Register University</h3>
-    <input type="text" id="uniName" placeholder="University Name" required>
-    <input type="text" id="uniRegId" placeholder="Registration ID" required>
-    <input type="text" id="uniIPFSHash" placeholder="IPFS Hash" required>
-    <button onclick="registerUniversity()">Register</button>
-
-    <h3>Remove University</h3>
-    <input type="text" id="removeUniRegId" placeholder="Registration ID" required>
-    <button onclick="removeUniversity()">Remove</button>
+    <h3>Verify University</h3>
+    <input type="text" id="verifyRegId" placeholder="Enter University Reg ID">
+    <button onclick="verifyUniversity()">Verify University</button>
+    <p id="universityDetails"></p>
 
     <h3>All Registered Universities</h3>
     <button onclick="getAllUniversities()">Fetch All</button>
