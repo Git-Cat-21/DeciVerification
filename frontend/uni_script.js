@@ -1,46 +1,6 @@
-const CONTRACT_ADDRESS = "0xC8e44e8F4bA192752fbDe1Ce77C1618f1B367bd7";
+const CONTRACT_ADDRESS = "0x38E5311309d1319eE44500F68d6e1e06DC6C07b4";
 const ABI = [
-    {
-        "inputs": [
-            { "internalType": "string", "name": "_Name", "type": "string" },
-            { "internalType": "string", "name": "_SRN", "type": "string" },
-            { "internalType": "string", "name": "_Course", "type": "string" },
-            { "internalType": "uint256", "name": "Semester", "type": "uint256" }
-        ],
-        "name": "registerStudent",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "address", "name": "_student", "type": "address" }],
-        "name": "isStudentValid",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            { "internalType": "string", "name": "_SRN", "type": "string" },
-            { "internalType": "string", "name": "_Course", "type": "string" },
-            { "internalType": "string", "name": "_IPFSHash", "type": "string" }
-        ],
-        "name": "issueCertificate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "string", "name": "_SRN", "type": "string" }],
-        "name": "getCertificate",
-        "outputs": [
-            { "internalType": "string", "name": "", "type": "string" },
-            { "internalType": "string", "name": "", "type": "string" },
-            { "internalType": "string", "name": "", "type": "string" }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
+    
     {
         "inputs": [
             { "internalType": "string", "name": "_name", "type": "string" },
@@ -76,26 +36,8 @@ const ABI = [
         "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }],
         "stateMutability": "view",
         "type": "function"
-    },
-    // Add the new function for eligibility verification
-    {
-        "inputs": [
-            { "internalType": "string", "name": "_name", "type": "string" },
-            { "internalType": "string", "name": "_certificateIPFSHash", "type": "string" }
-        ],
-        "name": "verifyEligibility",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "address", "name": "_student", "type": "address" }],
-        "name": "isStudentEligible",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "stateMutability": "view",
-        "type": "function"
     }
-];
+]    // Add the new function for eligibility verification
 
 let provider, signer, contract;
 
@@ -206,120 +148,6 @@ async function verifyIPFSOnPinata(ipfsHash) {
     }
 }
 
-// Verify student eligibility
-async function verifyEligibility() {
-    if (!contract) return alert("Please connect wallet first!");
-    
-    const name = document.getElementById("name").value;
-    const ipfsHash = document.getElementById("ipfshash").value;
-    
-    if (!name || !ipfsHash) {
-        return alert("Please enter your name and 12th pass certificate IPFS hash");
-    }
-    
-    try {
-        // First verify the IPFS hash exists on Pinata
-        document.getElementById("eligibilityStatus").innerText = "Status: Checking IPFS hash...";
-        
-        const isValidIPFS = await verifyIPFSOnPinata(ipfsHash);
-        
-        if (!isValidIPFS) {
-            document.getElementById("eligibilityStatus").innerText = "Status: Invalid IPFS Hash ❌";
-            return alert("The certificate IPFS hash could not be verified on Pinata. Please ensure it has been uploaded correctly.");
-        }
-        
-        // Call the smart contract to verify eligibility
-        document.getElementById("eligibilityStatus").innerText = "Status: Verifying with blockchain...";
-        const tx = await contract.verifyEligibility(name, ipfsHash);
-        await tx.wait();
-        
-        document.getElementById("eligibilityStatus").innerText = "Status: Verified ✅";
-        alert("Eligibility verified successfully! You can now register as a student.");
-    } catch (error) {
-        console.error("Error verifying eligibility:", error);
-        document.getElementById("eligibilityStatus").innerText = "Status: Verification Failed ❌";
-        alert("Eligibility verification failed: " + (error.message || "Unknown error"));
-    }
-}
-
-// Register student
-async function registerStudent() {
-    if (!contract) return alert("Please connect wallet first!");
-    
-    const address = await signer.getAddress();
-    
-    // Check if student is eligible before registration
-    try {
-        const isEligible = await contract.isStudentEligible(address);
-        if (!isEligible) {
-            return alert("You must verify your eligibility with a 12th pass certificate first!");
-        }
-    } catch (error) {
-        console.error("Error checking eligibility:", error);
-        return alert("Error checking eligibility. Make sure you have verified your eligibility first.");
-    }
-    
-    const name = document.getElementById("name").value;
-    const srn = document.getElementById("srn").value;
-    const course = document.getElementById("course").value;
-    const semester = parseInt(document.getElementById("semester").value);
-    
-    if (!name || !srn || !course || isNaN(semester)) {
-        return alert("Please fill in all fields with valid information!");
-    }
-    
-    try {
-        const tx = await contract.registerStudent(name, srn, course, semester);
-        await tx.wait();
-        alert("Student registered successfully!");
-    } catch (error) {
-        console.error(error);
-        alert("Registration failed: " + (error.message || "Unknown error"));
-    }
-}
-
-// Verify student
-async function verifyStudent() {
-    if (!contract) return alert("Please connect wallet first!");
-    const address = document.getElementById("studentAddress").value.trim();
-    try {
-        const isRegistered = await contract.isStudentValid(address);
-        document.getElementById("studentVerification").innerText = isRegistered ? "✅ Student is registered!" : "❌ Student is NOT registered.";
-    } catch (error) {
-        console.error(error);
-        alert("Verification failed!");
-    }
-}
-
-// Issue certificate
-async function issueCertificate() {
-    if (!contract) return alert("Please connect wallet first!");
-    const srn = document.getElementById("certSrn").value;
-    const course = document.getElementById("certCourse").value;
-    const ipfsHash = document.getElementById("certIPFSHash").value;
-    try {
-        const tx = await contract.issueCertificate(srn, course, ipfsHash);
-        await tx.wait();
-        alert("Certificate issued successfully!");
-    } catch (error) {
-        console.error(error);
-        alert("Certificate issuance failed!");
-    }
-}
-
-// Get certificate
-async function getCertificate() {
-    if (!contract) return alert("Please connect wallet first!");
-    const srn = document.getElementById("getCertSrn").value;
-    try {
-        const [certSrn, certCourse, certIPFSHash] = await contract.getCertificate(srn);
-        document.getElementById("certificateDetails").innerText = `SRN: ${certSrn}, Course: ${certCourse}, IPFS Hash: ${certIPFSHash}`;
-    } catch (error) {
-        console.error(error);
-        alert("No certificate found!");
-    }
-}
-
 async function registerUniversity() {
     if (!contract) return alert("Please connect wallet first!");
     const name = document.getElementById("uniName").value;
@@ -337,7 +165,7 @@ async function registerUniversity() {
 
 async function verifyUniversity() {
     if (!contract) return alert("Please connect wallet first!");
-    
+
     const regIdInput = document.getElementById("verifyRegId");
     if (!regIdInput) {
         console.error("Error: Input field with ID 'verifyRegId' not found.");
@@ -360,6 +188,13 @@ async function verifyUniversity() {
             return;
         }
 
+        const isIPFSValid = await verifyIPFSOnPinata(ipfsHash);
+        if (!isIPFSValid) {
+            alert("IPFS hash is not found on Pinata!");
+            document.getElementById("universityDetails").innerText = "";
+            return;
+        }
+
         document.getElementById("universityDetails").innerText =
             `✅ Verified University: ${name}, IPFS Hash: ${ipfsHash}`;
     } catch (error) {
@@ -368,6 +203,7 @@ async function verifyUniversity() {
         document.getElementById("universityDetails").innerText = "";
     }
 }
+
 
 async function removeUniversity() {
     if (!contract) return alert("Please connect wallet first!");
