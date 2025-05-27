@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0x38E5311309d1319eE44500F68d6e1e06DC6C07b4";
+const CONTRACT_ADDRESS = "0x041E379Ea359d23156427435F32600ef507DEDD3";
 const ABI = [
     
     {
@@ -42,8 +42,8 @@ const ABI = [
 let provider, signer, contract;
 
 // Pinata Configuration
-const PINATA_API_KEY = "597fb26f3a710e516bdc"; // Replace with your actual Pinata API key
-const PINATA_SECRET_API_KEY = "2248f2b664531861d6b4bfd045807caa62cab6c1e56a117e09bf2a2f08d833b7"; // Replace with your actual Pinata secret key
+const PINATA_API_KEY = ""; // Replace with your actual Pinata API key
+const PINATA_SECRET_API_KEY = ""; // Replace with your actual Pinata secret key
 const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs/files";
 
 // Connect wallet and store address in localStorage
